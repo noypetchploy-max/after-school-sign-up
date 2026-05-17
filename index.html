@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงชื่อกิจกรรมหลังเลิกเรียน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom scrollbar for lists */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen p-4 md:p-8 flex justify-center">
+
+    <div class="max-w-3xl w-full space-y-6">
+        
+        <!-- Header -->
+        <header class="text-center space-y-2">
+            <h1 class="text-3xl font-bold text-indigo-700">ลงชื่อหลังเลิกเรียน 🏫</h1>
+            <p class="text-gray-500 text-sm md:text-base">เช็คชื่อว่าใครว่าง หรือไม่ว่าง ในแต่ละวัน (จันทร์-ศุกร์)</p>
+        </header>
+
+        <!-- Input Form Section -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+            <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">✍️ ลงชื่อของคุณ</h2>
+            
+            <div class="space-y-5">
+                <!-- Name Input -->
+                <div>
+                    <label for="userName" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล หรือ ชื่อเล่น</label>
+                    <input type="text" id="userName" placeholder="พิมพ์ชื่อของคุณที่นี่..." 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors outline-none text-base">
+                </div>
+
+                <!-- Day Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">เลือกวัน</label>
+                    <div class="grid grid-cols-5 gap-2" id="daySelectors">
+                        <button type="button" data-day="จันทร์" class="day-btn py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">จ.</button>
+                        <button type="button" data-day="อังคาร" class="day-btn py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">อ.</button>
+                        <button type="button" data-day="พุธ" class="day-btn py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">พ.</button>
+                        <button type="button" data-day="พฤหัสบดี" class="day-btn py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">พฤ.</button>
+                        <button type="button" data-day="ศุกร์" class="day-btn py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">ศ.</button>
+                    </div>
+                </div>
+
+                <!-- Status Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">สถานะ</label>
+                    <div class="flex gap-3">
+                        <button type="button" data-status="free" class="status-btn flex-1 py-3 rounded-xl border-2 border-transparent bg-green-50 text-green-700 font-medium hover:bg-green-100 transition-all flex justify-center items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            ว่าง
+                        </button>
+                        <button type="button" data-status="busy" class="status-btn flex-1 py-3 rounded-xl border-2 border-transparent bg-red-50 text-red-700 font-medium hover:bg-red-100 transition-all flex justify-center items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            ไม่ว่าง
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button id="submitBtn" class="w-full py-3.5 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    บันทึกข้อมูล
+                </button>
+            </div>
+        </section>
+
+        <!-- Display Section -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+            <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-gray-700 flex justify-between items-center">
+                <span>📋 สรุปรายชื่อ</span>
+                <span id="currentViewDayLabel" class="text-sm font-normal text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">วันจันทร์</span>
+            </h2>
+
+            <!-- View Tabs -->
+            <div class="flex overflow-x-auto gap-2 pb-2 mb-4 custom-scrollbar" id="viewTabs">
+                <button data-view-day="จันทร์" class="view-tab-btn flex-shrink-0 px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors whitespace-nowrap">วันจันทร์</button>
+                <button data-view-day="อังคาร" class="view-tab-btn flex-shrink-0 px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors whitespace-nowrap">วันอังคาร</button>
+                <button data-view-day="พุธ" class="view-tab-btn flex-shrink-0 px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors whitespace-nowrap">วันพุธ</button>
+                <button data-view-day="พฤหัสบดี" class="view-tab-btn flex-shrink-0 px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors whitespace-nowrap">วันพฤหัสฯ</button>
+                <button data-view-day="ศุกร์" class="view-tab-btn flex-shrink-0 px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors whitespace-nowrap">วันศุกร์</button>
+            </div>
+
+            <!-- Lists Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- Free List -->
+                <div class="bg-green-50/50 rounded-xl p-4 border border-green-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-medium text-green-800 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> ว่าง
+                        </h3>
+                        <span id="freeCount" class="bg-green-100 text-green-700 text-xs py-1 px-2 rounded-full font-semibold">0</span>
+                    </div>
+                    <ul id="freeList" class="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1 min-h-[100px]">
+                        <!-- List items will go here -->
+                        <li class="text-sm text-gray-400 italic text-center py-4">ยังไม่มีรายชื่อ</li>
+                    </ul>
+                </div>
+
+                <!-- Busy List -->
+                <div class="bg-red-50/50 rounded-xl p-4 border border-red-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-medium text-red-800 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> ไม่ว่าง
+                        </h3>
+                        <span id="busyCount" class="bg-red-100 text-red-700 text-xs py-1 px-2 rounded-full font-semibold">0</span>
+                    </div>
+                    <ul id="busyList" class="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1 min-h-[100px]">
+                        <!-- List items will go here -->
+                        <li class="text-sm text-gray-400 italic text-center py-4">ยังไม่มีรายชื่อ</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Toast Notification (Hidden by default) -->
+        <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50">
+            บันทึกข้อมูลสำเร็จ!
+        </div>
+    </div>
+
+    <script>
+        // Data Structure
+        // Stores data for each day. Format: { 'วัน': [{ id: 1, name: '...', status: 'free' }] }
+        const scheduleData = {
+            'จันทร์': [],
+            'อังคาร': [],
+            'พุธ': [],
+            'พฤหัสบดี': [],
+            'ศุกร์': []
+        };
+
+        // UI State
+        let selectedInputDay = 'จันทร์';
+        let selectedInputStatus = 'free'; // 'free' or 'busy'
+        let currentViewDay = 'จันทร์';
+
+        // DOM Elements
+        const userNameInput = document.getElementById('userName');
+        const dayButtons = document.querySelectorAll('.day-btn');
+        const statusButtons = document.querySelectorAll('.status-btn');
+        const submitBtn = document.getElementById('submitBtn');
+        const viewTabButtons = document.querySelectorAll('.view-tab-btn');
+        const currentViewDayLabel = document.getElementById('currentViewDayLabel');
+        const freeListEl = document.getElementById('freeList');
+        const busyListEl = document.getElementById('busyList');
+        const freeCountEl = document.getElementById('freeCount');
+        const busyCountEl = document.getElementById('busyCount');
+        const toastEl = document.getElementById('toast');
+
+        
+        // Initialize UI selections
+        function updateInputUI() {
+            // Update Day Buttons
+            dayButtons.forEach(btn => {
+                if(btn.dataset.day === selectedInputDay) {
+                    btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+                    btn.classList.remove('bg-gray-50', 'text-gray-700');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                    btn.classList.add('bg-gray-50', 'text-gray-700');
+                }
+            });
+
+            // Update Status Buttons
+            statusButtons.forEach(btn => {
+                const status = btn.dataset.status;
+                if(status === selectedInputStatus) {
+                    if(status === 'free') btn.classList.add('border-green-500', 'bg-green-100');
+                    if(status === 'busy') btn.classList.add('border-red-500', 'bg-red-100');
+                } else {
+                    btn.classList.remove('border-green-500', 'bg-green-100', 'border-red-500', 'bg-red-100');
+                }
+            });
+        }
+
+        // Initialize View Tabs
+        function updateViewTabsUI() {
+            viewTabButtons.forEach(btn => {
+                if(btn.dataset.viewDay === currentViewDay) {
+                    btn.classList.add('bg-indigo-600', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-600');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white');
+                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                }
+            });
+            currentViewDayLabel.textContent = 'วัน' + currentViewDay;
+            renderLists();
+        }
+
+
+        // Event Listeners for Input Selection
+        dayButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedInputDay = btn.dataset.day;
+                updateInputUI();
+            });
+        });
+
+        statusButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedInputStatus = btn.dataset.status;
+                updateInputUI();
+            });
+        });
+
+        // Event Listeners for View Tabs
+        viewTabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentViewDay = btn.dataset.viewDay;
+                updateViewTabsUI();
+            });
+        });
+
+
+        // Handle Form Submission
+        submitBtn.addEventListener('click', () => {
+            const name = userNameInput.value.trim();
+            if (!name) {
+                // Shake effect for empty input
+                userNameInput.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => userNameInput.classList.remove('ring-2', 'ring-red-500'), 500);
+                userNameInput.focus();
+                return;
+            }
+
+            // Check if user already exists for this day, update if so, else push
+            const dayData = scheduleData[selectedInputDay];
+            const existingIndex = dayData.findIndex(item => item.name.toLowerCase() === name.toLowerCase());
+
+            if (existingIndex > -1) {
+                dayData[existingIndex].status = selectedInputStatus;
+            } else {
+                dayData.push({
+                    id: Date.now(),
+                    name: name,
+                    status: selectedInputStatus
+                });
+            }
+
+            // Switch view to the day just added
+            currentViewDay = selectedInputDay;
+            updateViewTabsUI();
+            
+            // Clear input and show toast
+            userNameInput.value = '';
+            showToast(`บันทึกชื่อ ${name} สำหรับวัน${selectedInputDay} เรียบร้อย!`);
+        });
+
+
+        // Function to create list item HTML
+        function createListItem(item) {
+            const isFree = item.status === 'free';
+            const colorClass = isFree ? 'text-green-700 bg-white border-green-100' : 'text-red-700 bg-white border-red-100';
+            const icon = isFree ? '✅' : '❌';
+            
+            return `
+                <li class="flex justify-between items-center p-3 rounded-lg border shadow-sm ${colorClass} animate-[fadeIn_0.3s_ease-out]">
+                    <span class="font-medium">${icon} ${item.name}</span>
+                    <button onclick="deleteItem('${currentViewDay}', ${item.id})" class="text-gray-400 hover:text-red-500 transition-colors p-1" title="ลบชื่อ">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </li>
+            `;
+        }
+
+        // Render the lists based on currentViewDay
+        function renderLists() {
+            const dayData = scheduleData[currentViewDay];
+            const freeItems = dayData.filter(item => item.status === 'free');
+            const busyItems = dayData.filter(item => item.status === 'busy');
+
+            // Update Counts
+            freeCountEl.textContent = freeItems.length;
+            busyCountEl.textContent = busyItems.length;
+
+            // Render Free List
+            if (freeItems.length === 0) {
+                freeListEl.innerHTML = '<li class="text-sm text-gray-400 italic text-center py-4">ยังไม่มีรายชื่อ</li>';
+            } else {
+                freeListEl.innerHTML = freeItems.map(createListItem).join('');
+            }
+
+            // Render Busy List
+            if (busyItems.length === 0) {
+                busyListEl.innerHTML = '<li class="text-sm text-gray-400 italic text-center py-4">ยังไม่มีรายชื่อ</li>';
+            } else {
+                busyListEl.innerHTML = busyItems.map(createListItem).join('');
+            }
+        }
+
+        // Delete Item Function (attached to global window so inline onclick can find it)
+        window.deleteItem = function(day, id) {
+            scheduleData[day] = scheduleData[day].filter(item => item.id !== id);
+            renderLists();
+            showToast('ลบรายชื่อเรียบร้อย');
+        };
+
+
+        // Toast Notification
+        let toastTimeout;
+        function showToast(message) {
+            toastEl.textContent = message;
+            toastEl.classList.remove('translate-y-20', 'opacity-0');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastEl.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initial Setup
+        updateInputUI();
+        updateViewTabsUI();
+
+        // Add some basic CSS animations dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(5px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+    </script>
+</body>
+</html>
